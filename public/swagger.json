@@ -1,0 +1,20 @@
+{
+    "openapi" : "3.0.3",
+    "info": {
+        "title": "Blog API documentation",
+        "description": "Blog API DOcumentation",
+        "contact": {
+            "email": "nozami.id@gmail.com"
+        },
+        "license": {
+            "name": "BLOG API",
+            "url": "htttp://localhost:8000"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "htttp://localhost:8000/api/v1"
+        }
+    ]
+}
