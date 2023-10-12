@@ -1,20 +1,112 @@
 {
-    "openapi" : "3.0.3",
+    "openapi": "3.0.3",
     "info": {
-        "title": "Blog API documentation",
-        "description": "Blog API DOcumentation",
+        "title": "Blog API Documentation",
+        "description": "This is a sample Blog API server based on the openAPI 3.0 specification",
         "contact": {
             "email": "nozami.id@gmail.com"
         },
         "license": {
-            "name": "BLOG API",
-            "url": "htttp://localhost:8000"
+            "name": "Blog API",
+            "url": "http://localhost:8000"
         },
         "version": "1.0.0"
     },
     "servers": [
         {
-            "url": "htttp://localhost:8000/api/v1"
+            "url": "http://localhost:8000/api/v1"
         }
-    ]
+    ],
+    "tags": [
+        {
+            "name": "User",
+            "description": "Operation about User"
+        }
+    ],
+    "paths": {
+        "/register": {
+            "post": {
+                "tags": ["user"],
+                "description": "Register new user",
+                "requestBody": {
+                    "description": "Created User Object",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["name", "username", "password"],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "nozami": {
+                                    "description": "Register User Nozami",
+                                    "value": {
+                                        "name": "nozami",
+                                        "username": "nozami",
+                                        "password": "password"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Register Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "id": 1,
+                                                "nama": "nozami",
+                                                "username": "nozami"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Error",
+                        "content": {
+                            "apllication/json": {
+                                "examples": {
+                                    "validationError": {
+                                        "description": "Validation Error",
+                                        "value": {
+                                            "errors": {
+                                                "username": [
+                                                    "The username field is required.",
+                                                    "The username has already been taken."
+                                                ],
+                                                "name": [
+                                                    "The name field is required."
+                                                ],
+                                                "password": [
+                                                    "The password field is required."
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
