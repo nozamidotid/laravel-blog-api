@@ -107,6 +107,79 @@
                     }
                 }
             }
+        },
+        "/login": {
+            "post": {
+                "tags": ["user"],
+                "description": "Login user",
+                "requestBody": {
+                    "description": "Login User",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["username", "password"],
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "nozami": {
+                                    "description": "Login User Nozami",
+                                    "value": {
+                                        "username": "nozami",
+                                        "password": "password"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "id": 1,
+                                                "nama": "nozami",
+                                                "username": "nozami"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "error credential",
+                        "content": {
+                            "apllication/json": {
+                                "examples": {
+                                    "validationError": {
+                                        "description": "error credential",
+                                        "value": {
+                                            "errors": {
+                                                "message": [
+                                                    "username or password wrong!"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

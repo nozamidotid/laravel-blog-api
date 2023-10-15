@@ -56,4 +56,54 @@ class UserControllerTest extends TestCase
                 ],
             ]);
     }
+
+    public function testLoginSuccess()
+    {
+        $this->seed([UserSeeder::class]);
+
+        $this->post("/api/v1/login", [
+            "username" => "fardan",
+            "password" => "password"
+        ])->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    "name" => "fardan",
+                    "username" => "fardan",
+                ]
+            ]);
+    }
+
+    public function testLoginUserNotFound()
+    {
+        $this->seed([UserSeeder::class]);
+
+        $this->post("/api/v1/login", [
+            "username" => "tidakada",
+            "password" => "password"
+        ])->assertStatus(404)
+            ->assertJson([
+                "errors" => [
+                    "message" => [
+                        "username or password wrong!"
+                    ]
+                ]
+            ]);
+    }
+
+    public function testLoginWrongPassword()
+    {
+        $this->seed([UserSeeder::class]);
+
+        $this->post("/api/v1/login", [
+            "username" => "fardan",
+            "password" => "salah"
+        ])->assertStatus(404)
+            ->assertJson([
+                "errors" => [
+                    "message" => [
+                        "username or password wrong!"
+                    ]
+                ]
+            ]);
+    }
 }
