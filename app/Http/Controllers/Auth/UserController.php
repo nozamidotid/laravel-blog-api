@@ -11,6 +11,7 @@ use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -40,12 +41,20 @@ class UserController extends Controller
                         "username or password wrong!"
                     ]
                 ]
-            ], 404));
+            ], 401));
         }
 
         $user->token = Str::uuid()->toString();
         $user->save();
 
         return new UserResource($user);
+    }
+
+    public function getCurrentUser(Request $request) : UserResource 
+    {
+        $user = Auth::user();
+
+        return new UserResource($user);
+        
     }
 }

@@ -151,7 +151,8 @@
                                             "data": {
                                                 "id": 1,
                                                 "nama": "nozami",
-                                                "username": "nozami"
+                                                "username": "nozami",
+                                                "token": "10ffe8fd-253c-4cca-af9a-7182e1cabbcb"
                                             }
                                         }
                                     }
@@ -159,13 +160,13 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "error credential",
+                    "400": {
+                        "description": "Validation Error",
                         "content": {
                             "apllication/json": {
                                 "examples": {
                                     "validationError": {
-                                        "description": "error credential",
+                                        "description": "Validation Error",
                                         "value": {
                                             "errors": {
                                                 "message": [
@@ -179,6 +180,75 @@
                         }
                     }
                 }
+            }
+        },
+        "/user": {
+            "get": {
+                "tags": ["user"],
+                "description": "Get Current user",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "description": "",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Get Current User",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "id": 1,
+                                                "nama": "nozami",
+                                                "username": "nozami",
+                                                "token": "10ffe8fd-253c-4cca-af9a-7182e1cabbcb"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "apllication/json": {
+                                "examples": {
+                                    "validationError": {
+                                        "description": "Unauthorized",
+                                        "value": {
+                                            "errors": {
+                                                "message": ["unauthorized!"]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "api_key": {
+                "type": "apiKey",
+                "name": "api_key",
+                "in": "header"
             }
         }
     }

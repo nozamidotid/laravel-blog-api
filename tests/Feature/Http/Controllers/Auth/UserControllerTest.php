@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\AUth;
+namespace Tests\Feature\Http\Controllers\Auth;
 
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -80,7 +80,7 @@ class UserControllerTest extends TestCase
         $this->post("/api/v1/login", [
             "username" => "tidakada",
             "password" => "password"
-        ])->assertStatus(404)
+        ])->assertStatus(401)
             ->assertJson([
                 "errors" => [
                     "message" => [
@@ -97,11 +97,60 @@ class UserControllerTest extends TestCase
         $this->post("/api/v1/login", [
             "username" => "fardan",
             "password" => "salah"
-        ])->assertStatus(404)
+        ])->assertStatus(401)
             ->assertJson([
                 "errors" => [
                     "message" => [
                         "username or password wrong!"
+                    ]
+                ]
+            ]);
+    }
+
+    public function testGetUserSuccess()
+    {
+        $this->seed([UserSeeder::class]);
+
+        $this->get("/api/v1/user", [
+            "api_key" => "token"
+        ])->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    "name" => "fardan",
+                    "username" => "fardan",
+                    "token" => "token"
+
+                ]
+            ]);
+    }
+
+    public function testGetUserUnauthorized()
+    {
+        $this->seed([UserSeeder::class]);
+
+        $this->get("/api/v1/user")
+            ->assertStatus(401)
+            ->assertJson([
+                "errors" => [
+                    "message" => [
+                        "unauthorized"
+                    ]
+                ]
+            ]);
+    }
+
+    public function testGetUserInvalidToken()
+    {
+        $this->seed([UserSeeder::class]);
+
+        $this->get("/api/v1/user", [
+            "api_key" => "salah"
+        ])
+            ->assertStatus(401)
+            ->assertJson([
+                "errors" => [
+                    "message" => [
+                        "unauthorized"
                     ]
                 ]
             ]);

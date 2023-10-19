@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AUth\UserController;
+use App\Http\Middleware\AuthApiMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
+
+Route::middleware([AuthApiMiddleware::class])->group(function () {
+    Route::get('user', [UserController::class, 'getCurrentUser']);
+});
