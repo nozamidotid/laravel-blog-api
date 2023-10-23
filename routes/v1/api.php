@@ -22,4 +22,5 @@ Route::post('login', [UserController::class, 'login']);
 Route::middleware([AuthApiMiddleware::class])->group(function () {
     Route::get('user', [UserController::class, 'getCurrentUser']);
     Route::patch('user', [UserController::class, 'update']);
+    Route::delete('user', [UserController::class, 'logout']);
 });
