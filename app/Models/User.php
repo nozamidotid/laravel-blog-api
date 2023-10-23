@@ -2,44 +2,74 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class User extends Model implements Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory;
+
+    protected $fillable = ["name", "username"];
 
     /**
-     * The attributes that are mass assignable.
+     * Get the name of the unique identifier for the user.
      *
-     * @var array<int, string>
+     * @return string
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    public function getAuthIdentifierName()
+    {
+        return "username";
+    }
 
     /**
-     * The attributes that should be hidden for serialization.
+     * Get the unique identifier for the user.
      *
-     * @var array<int, string>
+     * @return mixed
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public function getAuthIdentifier()
+    {
+        return $this->username;
+    }
 
     /**
-     * The attributes that should be cast.
+     * Get the password for the user.
      *
-     * @var array<string, string>
+     * @return string
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    public function getAuthPassword()
+    {
+        $this->password;
+    }
+
+    /**
+     * Get the token value for the "remember me" session.
+     *
+     * @return string
+     */
+    public function getRememberToken()
+    {
+        $this->token;
+    }
+
+    /**
+     * Set the token value for the "remember me" session.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setRememberToken($value)
+    {
+        $this->token = $value;
+    }
+
+    /**
+     * Get the column name for the "remember me" token.
+     *
+     * @return string
+     */
+    public function getRememberTokenName()
+    {
+        return 'token';
+    }
 }
