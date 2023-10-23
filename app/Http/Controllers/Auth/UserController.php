@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AUth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserLoginRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Auth\Events\Validated;
@@ -56,5 +57,23 @@ class UserController extends Controller
 
         return new UserResource($user);
         
+    }
+
+    public function update(UserUpdateRequest $request) : UserResource 
+    {
+        $user = $request->user();
+
+        $data = $request->validated();
+        
+        if($data["name"]){
+            $user->name = $data["name"];
+        }
+        if($data["password"]){
+            $user->password = Hash::make($data["password"]);
+        }
+
+        $user->save();
+
+        return new UserResource($user);
     }
 }

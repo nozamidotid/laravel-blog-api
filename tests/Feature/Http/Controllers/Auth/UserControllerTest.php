@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Auth;
 
+use App\Models\User;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -151,6 +152,73 @@ class UserControllerTest extends TestCase
                 "errors" => [
                     "message" => [
                         "unauthorized"
+                    ]
+                ]
+            ]);
+    }
+
+    public function testUpdateNameSuccess()
+    {
+        $this->seed([UserSeeder::class]);
+
+        $oldUser = User::query()->where("username", "fardan")->first();
+
+        $this->patch('/api/v1/user', [
+            "name" => "update",
+            "password" => "password",
+        ], [
+            "api_key" => "token"
+        ])->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    "name" => "update"
+                ]
+            ]);
+
+        $newUser = User::query()->where("username", "fardan")->first();
+
+        $this->assertNotEquals($oldUser->name, $newUser->name);
+    }
+
+    public function testUpdatePasswordSuccess()
+    {
+        $this->seed([UserSeeder::class]);
+
+        $oldUser = User::query()->where("username", "fardan")->first();
+
+        $this->patch('/api/v1/user', [
+            "name" => "fardan",
+            "password" => "update",
+        ], [
+            "api_key" => "token"
+        ])->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    "name" => "fardan",
+                    "username" => "fardan"
+                ]
+            ]);
+
+        $newUser = User::query()->where("username", "fardan")->first();
+
+        $this->assertNotEquals($oldUser->password, $newUser->password);
+    }
+
+
+    public function testUpdateNameFailed()
+    {
+        $this->seed([UserSeeder::class]);
+
+        $this->patch('/api/v1/user', [
+            "name" => "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta qui consequuntur magni neque temporibus corporis adipisci iusto. Facilis enim esse ratione aspernatur eius. Aliquam eos quo molestias vitae saepe corporis.",
+            "password" => "password",
+        ], [
+            "api_key" => "token"
+        ])->assertStatus(400)
+            ->assertJson([
+                "errors" => [
+                    "name" => [
+                        "The name field must not be greater than 100 characters."
                     ]
                 ]
             ]);
