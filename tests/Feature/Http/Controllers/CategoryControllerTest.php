@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use App\Models\Category;
 use Database\Seeders\CategorySeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -17,18 +18,18 @@ class CategoryControllerTest extends TestCase
         $this->get("/api/v1/category", [
             "api_key" => "token"
         ])->assertStatus(200)
-        ->assertJson([
-            "data" => [
-                [
-                    "name" => "Laravel",
-                    "slug" => "laravel",
-                ],
-                [
-                    "name" => "Nestjs",
-                    "slug" => "nestjs",
-                ],
-            ]
-        ]);
+            ->assertJson([
+                "data" => [
+                    [
+                        "name" => "Laravel",
+                        "slug" => "laravel",
+                    ],
+                    [
+                        "name" => "Nestjs",
+                        "slug" => "nestjs",
+                    ],
+                ]
+            ]);
     }
     public function testGetCategoryFailed()
     {
@@ -37,12 +38,97 @@ class CategoryControllerTest extends TestCase
         $this->get("/api/v1/category", [
             "api_key" => "salah"
         ])->assertStatus(401)
-        ->assertJson([
-            "errors" => [
-                "message" => [
-                    "unauthorized"
+            ->assertJson([
+                "errors" => [
+                    "message" => [
+                        "unauthorized"
+                    ]
                 ]
+            ]);
+    }
+
+    public function testCreateCategorySuccess()
+    {
+        $this->seed([UserSeeder::class]);
+
+        $this->post(
+            '/api/v1/category',
+            [
+                "name" => "laravel BLog API"
+            ],
+            [
+                "api_key" => "token"
             ]
-        ]);
+        )->assertStatus(201)
+            ->assertJson([
+                "data" => [
+                    "name" => "Laravel Blog Api",
+                    "slug" => "laravel-blog-api",
+                ]
+            ]);
+    }
+
+    public function testCreateCategoryFailed()
+    {
+        $this->seed([UserSeeder::class]);
+
+        $this->post(
+            '/api/v1/category',
+            [],
+            [
+                "api_key" => "token"
+            ]
+        )->assertStatus(400)
+            ->assertJson([
+                "errors" => [
+                    "name" => [
+                        'The name field is required.'
+                    ]
+                ]
+            ]);
+    }
+
+    public function testCreateCategoryNameAlreadyExist()
+    {
+        $this->seed([UserSeeder::class, CategorySeeder::class]);
+
+        $this->post(
+            '/api/v1/category',
+            [
+                "name" => "laravel"
+            ],
+            [
+                "api_key" => "token"
+            ]
+        )->assertStatus(400)
+            ->assertJson([
+                "errors" => [
+                    "name" => [
+                        'The name has already been taken.'
+                    ]
+                ]
+            ]);
+    }
+
+    public function testCreateCategoryUnauthorized()
+    {
+        $this->seed([UserSeeder::class]);
+
+        $this->post(
+            '/api/v1/category',
+            [
+                "name" => "laravel"
+            ],
+            [
+                "api_key" => "salah"
+            ]
+        )->assertStatus(401)
+            ->assertJson([
+                "errors" => [
+                    "message" => [
+                        'unauthorized'
+                    ]
+                ]
+            ]);
     }
 }

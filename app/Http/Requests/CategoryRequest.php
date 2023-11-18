@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CategoryRequest extends FormRequest
 {
@@ -11,7 +13,7 @@ class CategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return auth()->user() !== null;
     }
 
     /**
@@ -21,8 +23,18 @@ class CategoryRequest extends FormRequest
      */
     public function rules(): array
     {
+        if(isset($this["name"])){
+            $this["name"] = str($this["name"])->title(); // laravel BLOG API => Laravel Blog Api
+        }
         return [
-            //
+            "name" => ["required", "unique:categories"]
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response([
+            "errors" => $validator->getMessageBag()
+        ], 400));
     }
 }

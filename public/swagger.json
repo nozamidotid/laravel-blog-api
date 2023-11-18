@@ -449,6 +449,109 @@
                         "api_key": []
                     }
                 ]
+            },
+            "post": {
+                "tags": ["Category"],
+                "description": "create Category",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "description": "",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Create Category",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["name"],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "Laravel": {
+                                    "description": "create laravel category",
+                                    "value": {
+                                        "name": "laravel"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success Create Category",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "id": 1,
+                                                "name": "Laravel",
+                                                "slug": "laravel"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "apllication/json": {
+                                "examples": {
+                                    "badRequest": {
+                                        "description": "Bad Request",
+                                        "value": {
+                                            "errors": {
+                                                "message": {
+                                                    "name" : [
+                                                        "The name has already been taken.",
+                                                        "The name field is required."
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "apllication/json": {
+                                "examples": {
+                                    "Unauthorized": {
+                                        "description": "Unauthorized",
+                                        "value": {
+                                            "errors": {
+                                                "message": ["unauthorized!"]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
             }
         }
     },
