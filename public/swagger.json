@@ -553,6 +553,92 @@
                     }
                 ]
             }
+        },
+        "/category/{idCategory}": {
+            "get": {
+                "tags": ["Category"],
+                "description": "Create Category",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "description": "",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "idCategory",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Category Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "id": 1,
+                                                "name": "Laravel",
+                                                "slug": "laravel"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "notFound",
+                        "content": {
+                            "apllication/json": {
+                                "examples": {
+                                    "notFound": {
+                                        "description": "notFound",
+                                        "value": {
+                                            "errors": {
+                                                "message": [
+                                                    "not found!"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "apllication/json": {
+                                "examples": {
+                                    "validationError": {
+                                        "description": "Unauthorized",
+                                        "value": {
+                                            "errors": {
+                                                "message": ["unauthorized!"]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
         }
     },
     "components": {

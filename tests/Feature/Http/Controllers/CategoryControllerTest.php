@@ -131,4 +131,52 @@ class CategoryControllerTest extends TestCase
                 ]
             ]);
     }
+
+    public function testGetCategoryByIdSuccess()
+    {
+        $this->seed([UserSeeder::class, CategorySeeder::class]);
+
+        $category = Category::query()->first();
+
+        $this->get('/api/v1/category/' . $category->id, [
+            'api_key' => "token"
+        ])->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    "name" => "Laravel",
+                    "slug" => "laravel"
+                ]
+            ]);
+    }
+
+    public function testGetCategoryByIdNotFound()
+    {
+        $this->seed([UserSeeder::class, CategorySeeder::class]);
+
+        $category = Category::query()->first();
+
+        $this->get('/api/v1/category/' . $category->id - 1, [
+            'api_key' => "token"
+        ])->assertStatus(404)
+            ->assertJson([
+                "errors" => [
+                    "message" => ["not found!"]
+                ]
+            ]);
+    }
+    public function testGetCategoryByIdUnauthorized()
+    {
+        $this->seed([UserSeeder::class, CategorySeeder::class]);
+
+        $category = Category::query()->first();
+
+        $this->get('/api/v1/category/', [
+            'api_key' => "salah"
+        ])->assertStatus(401)
+            ->assertJson([
+                "errors" => [
+                    "message" => ["unauthorized"]
+                ]
+            ]);
+    }
 }

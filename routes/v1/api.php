@@ -29,6 +29,7 @@ Route::middleware([AuthApiMiddleware::class])->group(function () {
     Route::controller(CategoryController::class)->group(function () {
         Route::get('category',  'index');
         Route::post('category',  'store');
+        Route::get('category/{id}',  'show')->where('id', '[0-9]+');
     });
 
 });

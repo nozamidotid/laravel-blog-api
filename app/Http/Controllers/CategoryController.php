@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -37,9 +38,20 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id): CategoryResource
     {
-        //
+        $category = Category::query()->find($id);
+        if (!$category) {
+            throw new HttpResponseException(response([
+                "errors" => [
+                    "message" => [
+                        "not found!"
+                    ]
+                ]
+            ], 404));
+        }
+
+        return new CategoryResource($category);
     }
 
     /**
