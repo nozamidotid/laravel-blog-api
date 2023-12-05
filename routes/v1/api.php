@@ -31,6 +31,7 @@ Route::middleware([AuthApiMiddleware::class])->group(function () {
         Route::post('category',  'store');
         Route::get('category/{id}',  'show')->where('id', '[0-9]+');
         Route::patch('category/{id}',  'update')->where('id', '[0-9]+');
+        Route::delete('category/{id}',  'destroy')->where('id', '[0-9]+');
     });
 
 });
