@@ -11,6 +11,21 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    private function getCategoryById(int $id) : Category 
+    {
+        $category = Category::query()->find($id);
+        if (!$category) {
+            throw new HttpResponseException(response([
+                "errors" => [
+                    "message" => [
+                        "not found!"
+                    ]
+                ]
+            ], 404));
+        }
+
+        return $category;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -40,16 +55,7 @@ class CategoryController extends Controller
      */
     public function show(string $id): CategoryResource
     {
-        $category = Category::query()->find($id);
-        if (!$category) {
-            throw new HttpResponseException(response([
-                "errors" => [
-                    "message" => [
-                        "not found!"
-                    ]
-                ]
-            ], 404));
-        }
+        $category = $this->getCategoryById($id);
 
         return new CategoryResource($category);
     }
@@ -57,9 +63,16 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): CategoryResource
     {
-        //
+        $category = $this->getCategoryById($id);
+        $name = $request->input('name');
+
+        $category->name = str($name)->title();
+        $category->slug = str($name)->slug();
+        $category->save();
+
+        return new CategoryResource($category);
     }
 
     /**

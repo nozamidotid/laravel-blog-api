@@ -164,6 +164,7 @@ class CategoryControllerTest extends TestCase
                 ]
             ]);
     }
+
     public function testGetCategoryByIdUnauthorized()
     {
         $this->seed([UserSeeder::class, CategorySeeder::class]);
@@ -176,6 +177,64 @@ class CategoryControllerTest extends TestCase
             ->assertJson([
                 "errors" => [
                     "message" => ["unauthorized"]
+                ]
+            ]);
+    }
+
+    public function testUpdateCategorySuccess()
+    {
+        $this->seed([UserSeeder::class, CategorySeeder::class]);
+
+        $category = Category::query()->first();
+
+        $this->patch('/api/v1/category/' . $category->id, [
+            "name" => "update"
+        ],
+        [
+            'api_key' => "token"
+        ])->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    "name" => "Update",
+                    "slug" => "update",
+                ]
+            ]);
+    }
+
+    public function testUpdateCategoryUnauthorized()
+    {
+        $this->seed([UserSeeder::class, CategorySeeder::class]);
+
+        $category = Category::query()->first();
+
+        $this->patch('/api/v1/category/' . $category->id, [
+            "name" => "update"
+        ],
+        [
+            'api_key' => "salah"
+        ])->assertStatus(401)
+            ->assertJson([
+                "errors" => [
+                    "message" => ["unauthorized"]
+                ]
+            ]);
+    }
+
+    public function testUpdateCategoryNotFound()
+    {
+        $this->seed([UserSeeder::class, CategorySeeder::class]);
+
+        $category = Category::query()->first();
+
+        $this->patch('/api/v1/category/' . $category->id - 1, [
+            "name" => "update"
+        ],
+        [
+            'api_key' => "token"
+        ])->assertStatus(404)
+            ->assertJson([
+                "errors" => [
+                    "message" => ["not found!"]
                 ]
             ]);
     }
