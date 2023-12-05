@@ -21,12 +21,16 @@
         {
             "name": "User",
             "description": "Operation about User"
+        },
+        {
+            "name": "Category",
+            "description": "Operation about Category"
         }
     ],
     "paths": {
         "/register": {
             "post": {
-                "tags": ["user"],
+                "tags": ["User"],
                 "description": "Register new user",
                 "requestBody": {
                     "description": "Created User Object",
@@ -110,7 +114,7 @@
         },
         "/login": {
             "post": {
-                "tags": ["user"],
+                "tags": ["User"],
                 "description": "Login user",
                 "requestBody": {
                     "description": "Login User",
@@ -184,7 +188,7 @@
         },
         "/user": {
             "get": {
-                "tags": ["user"],
+                "tags": ["User"],
                 "description": "Get Current user",
                 "parameters": [
                     {
@@ -242,7 +246,7 @@
                 ]
             },
             "patch": {
-                "tags": ["user"],
+                "tags": ["User"],
                 "description": "Update user",
                 "parameters": [
                     {
@@ -328,7 +332,7 @@
                 ]
             },
             "delete": {
-                "tags": ["user"],
+                "tags": ["User"],
                 "description": "Logout user",
                 "parameters": [
                     {
@@ -350,6 +354,448 @@
                                     "success": {
                                         "value": {
                                             "data": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "apllication/json": {
+                                "examples": {
+                                    "validationError": {
+                                        "description": "Unauthorized",
+                                        "value": {
+                                            "errors": {
+                                                "message": ["unauthorized!"]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/category": {
+            "get": {
+                "tags": ["Category"],
+                "description": "Get All Category",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "description": "",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Get All Category",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": [
+                                                {
+                                                    "id": 1,
+                                                    "name": "Laravel",
+                                                    "slug": "laravel"
+                                                },
+                                                {
+                                                    "id": 2,
+                                                    "name": "NestJs",
+                                                    "slug": "nestjs"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "apllication/json": {
+                                "examples": {
+                                    "Unauthorized": {
+                                        "description": "Unauthorized",
+                                        "value": {
+                                            "errors": {
+                                                "message": ["unauthorized!"]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": ["Category"],
+                "description": "create Category",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "description": "",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Create Category",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["name"],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "Laravel": {
+                                    "description": "create laravel category",
+                                    "value": {
+                                        "name": "laravel"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success Create Category",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "id": 1,
+                                                "name": "Laravel",
+                                                "slug": "laravel"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "apllication/json": {
+                                "examples": {
+                                    "badRequest": {
+                                        "description": "Bad Request",
+                                        "value": {
+                                            "errors": {
+                                                "message": {
+                                                    "name" : [
+                                                        "The name has already been taken.",
+                                                        "The name field is required."
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "apllication/json": {
+                                "examples": {
+                                    "Unauthorized": {
+                                        "description": "Unauthorized",
+                                        "value": {
+                                            "errors": {
+                                                "message": ["unauthorized!"]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/category/{idCategory}": {
+            "get": {
+                "tags": ["Category"],
+                "description": "Create Category",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "description": "",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "idCategory",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Category Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "id": 1,
+                                                "name": "Laravel",
+                                                "slug": "laravel"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "notFound",
+                        "content": {
+                            "apllication/json": {
+                                "examples": {
+                                    "notFound": {
+                                        "description": "notFound",
+                                        "value": {
+                                            "errors": {
+                                                "message": [
+                                                    "not found!"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "apllication/json": {
+                                "examples": {
+                                    "validationError": {
+                                        "description": "Unauthorized",
+                                        "value": {
+                                            "errors": {
+                                                "message": ["unauthorized!"]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": ["Category"],
+                "description": "Update Category",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "description": "",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "idCategory",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "description": "Update Category",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "Laravel": {
+                                    "description": "Update laravel category",
+                                    "value": {
+                                        "name": "Update"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update Category Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "id": 1,
+                                                "name": "Update",
+                                                "slug": "update"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "notFound",
+                        "content": {
+                            "apllication/json": {
+                                "examples": {
+                                    "notFound": {
+                                        "description": "notFound",
+                                        "value": {
+                                            "errors": {
+                                                "message": [
+                                                    "not found!"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "apllication/json": {
+                                "examples": {
+                                    "validationError": {
+                                        "description": "Unauthorized",
+                                        "value": {
+                                            "errors": {
+                                                "message": ["unauthorized!"]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": ["Category"],
+                "description": "Delete Category",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "description": "",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "idCategory",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Delete Category Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "notFound",
+                        "content": {
+                            "apllication/json": {
+                                "examples": {
+                                    "notFound": {
+                                        "description": "notFound",
+                                        "value": {
+                                            "errors": {
+                                                "message": [
+                                                    "not found!"
+                                                ]
+                                            }
                                         }
                                     }
                                 }

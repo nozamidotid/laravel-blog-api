@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\AUth\UserController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Middleware\AuthApiMiddleware;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,7 +20,18 @@ Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
 
 Route::middleware([AuthApiMiddleware::class])->group(function () {
-    Route::get('user', [UserController::class, 'getCurrentUser']);
-    Route::patch('user', [UserController::class, 'update']);
-    Route::delete('user', [UserController::class, 'logout']);
+    Route::controller(UserController::class)->group(function () {
+        Route::get('user',  'getCurrentUser');
+        Route::patch('user',  'update');
+        Route::delete('user',  'logout');
+    });
+
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('category',  'index');
+        Route::post('category',  'store');
+        Route::get('category/{id}',  'show')->where('id', '[0-9]+');
+        Route::patch('category/{id}',  'update')->where('id', '[0-9]+');
+        Route::delete('category/{id}',  'destroy')->where('id', '[0-9]+');
+    });
+
 });
